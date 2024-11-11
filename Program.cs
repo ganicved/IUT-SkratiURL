@@ -1,10 +1,13 @@
 using IUT_SkratiURL.Components;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContext<IUTContext>(options => options.UseSqlite("Data Source=DB.sqlite"));
 
 var app = builder.Build();
 
