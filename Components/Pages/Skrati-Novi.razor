@@ -3,8 +3,31 @@
 
 <PageTitle>Skrati URL adresu</PageTitle>
 
+<EditForm Model="@urlAdresa" OnValidSubmit="@SkratiUrl">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="destinacijaUrl">Skrati URL adresu:</label>
+        <InputText id="destinacijaUrl" class="form-control" @bind-Value="urlAdresa.DestinacijaUrl" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">✂ Skrati</button>
+</EditForm>
+
 @code {
     [Inject]
     public SkratiURLService servis { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
+    private UrlAdresa urlAdresa = new UrlAdresa();
+
+    private async Task SkratiUrl()
+    {
+        string skraceniUrl = await servis.SkratiUrl(urlAdresa.DestinacijaUrl);
+        urlAdresa.SkraceniUrl = skraceniUrl;
+        UrlAdresa ua = await servis.DodajUrlAdresu(urlAdresa);
+        NavigationManager.NavigateTo($"/pregled/{ua.Id}");
+    }
 }

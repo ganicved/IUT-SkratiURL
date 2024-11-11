@@ -1,0 +1,40 @@
+﻿@page "/pregled/{id:int}"
+@rendermode InteractiveServer
+
+<PageTitle>Pregled adrese</PageTitle>
+
+@if (urlAdresa == null)
+{
+    <p>Učitavanje...</p>
+}
+else
+{
+    <div>
+        <h3>Destinacijski URL:</h3>
+        <p>@urlAdresa.DestinacijaUrl</p>
+
+        <h3>Skraćeni URL:</h3>
+        <p>@urlAdresa.SkraceniUrl</p>
+
+        <h3>Datum kreiranja:</h3>
+        <p>@urlAdresa.DatumKreiranja</p>
+
+        <h3>Status:</h3>
+        <p>@(urlAdresa.IsAktivan ? "Aktivan" : "Neaktivan")</p>
+    </div>
+}
+
+
+@code {
+    [Inject]
+    public SkratiURLService servis { get; set; }
+    [Parameter]
+    public int id { get; set; }
+    private UrlAdresa? urlAdresa;
+
+    protected override async Task OnInitializedAsync()
+    {
+        urlAdresa = await servis.GetByIdAsync(id);
+    }
+
+}

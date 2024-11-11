@@ -9,7 +9,6 @@ public class UrlAdresa
     [Required]
     [MaxLength(2000)]
     public string DestinacijaUrl { get; set; }
-    [Required]
     [MaxLength(255)]
     public string SkraceniUrl { get; set; }
     public DateTime DatumKreiranja { get; set; }
