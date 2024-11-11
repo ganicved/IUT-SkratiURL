@@ -9,6 +9,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddDbContext<IUTContext>(options => options.UseSqlite("Data Source=DB.sqlite"));
 
+builder.Services.AddScoped<SkratiURLService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
