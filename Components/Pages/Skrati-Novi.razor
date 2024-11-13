@@ -4,30 +4,42 @@
 <PageTitle>Skrati URL adresu</PageTitle>
 
 <EditForm Model="@urlAdresa" OnValidSubmit="@SkratiUrl">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+	<DataAnnotationsValidator />
+	<ValidationSummary />
 
-    <div class="form-group">
-        <label for="destinacijaUrl">Skrati URL adresu:</label>
-        <InputText id="destinacijaUrl" class="form-control" @bind-Value="urlAdresa.DestinacijaUrl" />
-    </div>
+	<div class="form-group">
+		<label for="destinacijaUrl">Skrati URL adresu:</label>
+		<InputText id="destinacijaUrl" class="form-control" @bind-Value="urlAdresa.DestinacijaUrl" />
+	</div>
 
-    <button type="submit" class="btn btn-primary">✂ Skrati</button>
+	<div class="form-group">
+		<label for="naziv">Naziv (opcionalno):</label>
+		<InputText id="naziv" class="form-control" @bind-Value="urlAdresa.Naziv" />
+	</div>
+
+	<div class="form-group">
+		<label for="naziv">Opis (opcionalno):</label>
+		<InputText id="naziv" class="form-control" @bind-Value="urlAdresa.Opis" />
+	</div>
+
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary mt-4">✂ Skrati</button>
+	</div>
 </EditForm>
 
 @code {
-    [Inject]
-    public SkratiURLService servis { get; set; }
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
+	[Inject]
+	public SkratiURLService servis { get; set; }
+	[Inject]
+	public NavigationManager NavigationManager { get; set; }
 
-    private UrlAdresa urlAdresa = new UrlAdresa();
+	private UrlAdresa urlAdresa = new UrlAdresa();
 
-    private async Task SkratiUrl()
-    {
-        string skraceniUrl = await servis.SkratiUrl(urlAdresa.DestinacijaUrl);
-        urlAdresa.SkraceniUrl = skraceniUrl;
-        UrlAdresa ua = await servis.DodajUrlAdresu(urlAdresa);
-        NavigationManager.NavigateTo($"/pregled/{ua.Id}");
-    }
+	private async Task SkratiUrl()
+	{
+		string skraceniUrl = await servis.SkratiUrl(urlAdresa.DestinacijaUrl);
+		urlAdresa.SkraceniUrl = skraceniUrl;
+		UrlAdresa ua = await servis.DodajUrlAdresu(urlAdresa);
+		NavigationManager.NavigateTo($"/p/{ua.Id}");
+	}
 }

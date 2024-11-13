@@ -1,0 +1,74 @@
+﻿@page "/izmijeni/{id:int}"
+@rendermode InteractiveServer
+
+<PageTitle>Izmjena adrese</PageTitle>
+
+@if (urlAdresa == null)
+{
+    <p>Učitavanje...</p>
+}
+else if (urlAdresa.IsObrisan == true)
+{
+    <p>Traženi URL je obrisan.</p>
+}
+else
+{
+    <div>
+
+        <EditForm Model="@urlAdresa" OnValidSubmit="@SacuvajUrl">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+
+        <h3>Naziv:</h3>
+        <InputText id="naziv" class="form-control" @bind-Value="urlAdresa.Naziv" />
+
+        <h3>Opis:</h3>
+        <InputText id="opis" class="form-control" @bind-Value="urlAdresa.Opis" />
+
+        <h3>Destinacijski URL:</h3>
+        <InputText id="destinacijaUrl" class="form-control" @bind-Value="urlAdresa.DestinacijaUrl" />
+
+        <h3>Skraćeni URL:</h3>
+        <p><a href="@urlAdresa.SkraceniUrl" target="_blank">@($"{NavigationManager.BaseUri}s/{urlAdresa.SkraceniUrl}")</a></p>
+
+        <h3>Datum kreiranja:</h3>
+        <p>@urlAdresa.DatumKreiranja.ToString("dd.MM.yyyy HH:mm:ss")</p>
+
+        <h3>Status:</h3>
+        <p>
+            <input type="checkbox" @bind="urlAdresa.IsAktivan" /> Aktivan
+        </p>
+
+        <button type="submit" class="btn btn-primary mt-4" @onclick="IzmijeniUrl">💾 Spremi izmjene</button>
+
+        </EditForm>
+
+    </div>
+}
+
+
+@code {
+    [Inject]
+    public SkratiURLService servis { get; set; }
+    [Parameter]
+    public int id { get; set; }
+    private UrlAdresa? urlAdresa;
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        urlAdresa = await servis.GetByIdAsync(id);
+    }
+    private void IzmijeniUrl(MouseEventArgs e)
+    {
+        if (urlAdresa is not null) NavigationManager.NavigateTo($"/izmijeni/{id}");
+    }
+
+    private async Task SacuvajUrl()
+    {
+        UrlAdresa ua = await servis.EditUrlAdresa(urlAdresa);
+        NavigationManager.NavigateTo($"/p/{ua.Id}");
+    }
+}

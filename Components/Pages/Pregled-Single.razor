@@ -1,4 +1,4 @@
-﻿@page "/pregled/{id:int}"
+﻿@page "/p/{id:int}"
 @rendermode InteractiveServer
 
 <PageTitle>Pregled adrese</PageTitle>
@@ -7,20 +7,36 @@
 {
     <p>Učitavanje...</p>
 }
+else if (urlAdresa.IsObrisan == true)
+{
+    <p>Traženi URL je obrisan.</p>
+}
 else
 {
     <div>
+        <h3>Naziv:</h3>
+        <p>@(urlAdresa.Naziv ?? "N/A")</p>
+
+        <h3>Opis:</h3>
+        <p>@(urlAdresa.Opis ?? "Nema")</p>
+
+        <h3>Broj preusmjeravanja:</h3>
+        <p>@(urlAdresa.BrojPreusmjeravanja)</p>
+
         <h3>Destinacijski URL:</h3>
-        <p>@urlAdresa.DestinacijaUrl</p>
+        <p><a href="@urlAdresa.DestinacijaUrl" target="_blank">@urlAdresa.DestinacijaUrl</a></p>
 
         <h3>Skraćeni URL:</h3>
-        <p>@urlAdresa.SkraceniUrl</p>
+        <p><a href="@($"{NavigationManager.BaseUri}s/{urlAdresa.SkraceniUrl}")" target="_blank">@($"{NavigationManager.BaseUri}s/{urlAdresa.SkraceniUrl}")</a></p>
 
         <h3>Datum kreiranja:</h3>
-        <p>@urlAdresa.DatumKreiranja</p>
+        <p>@urlAdresa.DatumKreiranja.ToString("dd.MM.yyyy HH:mm:ss")</p>
 
         <h3>Status:</h3>
-        <p>@(urlAdresa.IsAktivan ? "Aktivan" : "Neaktivan")</p>
+        <p>@(urlAdresa.IsAktivan ? "✅ Aktivan" : "❌ Neaktivan")</p>
+
+        <button type="button" class="btn btn-secondary mt-4" @onclick="IzmijeniUrl">📝 Izmijeni</button>
+
     </div>
 }
 
@@ -31,10 +47,15 @@ else
     [Parameter]
     public int id { get; set; }
     private UrlAdresa? urlAdresa;
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         urlAdresa = await servis.GetByIdAsync(id);
     }
-
+    private void IzmijeniUrl(MouseEventArgs e)
+    {
+        if (urlAdresa is not null) NavigationManager.NavigateTo($"/izmijeni/{id}");
+    }
 }
