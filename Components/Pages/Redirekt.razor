@@ -1,0 +1,44 @@
+﻿@page "/s/{skraceniUrl}"
+@rendermode InteractiveServer
+
+<h3 class="m-4">@poruka</h3>
+
+@code {
+    [Inject]
+    public SkratiURLService servis { get; set; }
+    [Parameter]
+    public string skraceniUrl { get; set; }
+    private UrlAdresa? urlAdresa;
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    string poruka = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        poruka = "";
+        urlAdresa = await servis.GetBySkraceniUrlAsync(skraceniUrl);
+
+        if (urlAdresa is null)
+        {
+            NavigationManager.NavigateTo(NavigationManager.BaseUri, true);
+        }
+        else
+        {
+            if (urlAdresa.IsAktivan)
+            {
+                urlAdresa.BrojPreusmjeravanja += 1;
+
+                await servis.EditUrlAdresa(urlAdresa);
+
+                NavigationManager.NavigateTo(urlAdresa.DestinacijaUrl, true);
+            } else
+            {
+                poruka = "Traženi URL je neaktivan.";
+            }
+
+        }
+
+
+    }
+}

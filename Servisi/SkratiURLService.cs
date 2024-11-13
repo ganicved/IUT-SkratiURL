@@ -50,8 +50,12 @@ public class SkratiURLService
         return urlAdresa;
     }
 
-    public async Task<List<UrlAdresa>> GetAllUrlAdrese() => await _context.UrlAdrese.ToListAsync();
+    public async Task<List<UrlAdresa>> GetAllUrlAdrese() => await _context.UrlAdrese.Where(u => u.IsObrisan == false).ToListAsync();
 
     public async Task<UrlAdresa?> GetByIdAsync(int id) => await _context.UrlAdrese.FindAsync(id);
 
+    public async Task<UrlAdresa?> GetBySkraceniUrlAsync(string url)
+    {
+        return _context.UrlAdrese.Where(u => u.SkraceniUrl.Trim() == url.Trim()).First();
+    }
 }

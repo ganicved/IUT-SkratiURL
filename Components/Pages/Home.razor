@@ -1,7 +1,28 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>IUT URL Shortener</PageTitle>
 
-<h1>Hello, world!</h1>
+<div style="width:70%;margin:0 auto;">
+	<h1>O aplikaciji</h1>
+	<hr />
+	<p>
+		Web aplikacija pravljena kao sample projekat za Fakultet informacionih tehnologija na Internacionalnom univerzitetu Travnik.
+	</p>
 
-Welcome to your new app.
+	<p>
+		Alati korišteni su .NET verzija 8. Blazor framework. Server-side hosting model. <br /> Kao ORM sam koristio Entity Framework Core. U pozadini je Sqlite DB.
+	</p>
+
+	<p>
+		Aplikacija je zamišljenja da služi kao URL shortener. CRUD funkcionalnosti za URL adrese. <br /> Postoji neka osnovna analitika broja redirekcija/posjeta. Mogućnost aktiviranja/deaktiviranja skraćenih URL-ova. <br /> Trenutno nema nikakav auth niti autorizacija (aka svi sve mogu :-)) jer nisam htio da komplikujem implementirajući identity. <br /> Sve kontrole su Blazor-ove najosnovnije. Mislim da nema potrebe za nekim component library-jem jer je sample projekat te neće biti nekih većih setova podataka pa samim tim nema potrebe ni za grid-om, paging-om i sl..
+	</p>
+
+	<p>
+		GitHub repozitorij URL: <a href="https://github.com/ganicved/IUT-SkratiURL" target="_blank">github.com/ganicved/IUT-SkratiURL</a>
+	</p>
+
+	<p>
+		<em>Vedad Ganić</em> <br />
+		<b>FIT-52/23</b>
+	</p>
+</div>

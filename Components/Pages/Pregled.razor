@@ -3,10 +3,55 @@
 
 <PageTitle>Pregled svih adresa</PageTitle>
 
+@if (urlAdrese == null)
+{
+    <p><em>Učitavanje...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Naziv</th>
+                <th>Opis</th>
+                <th>Destinacija</th>
+                <th>URL</th>
+                <th>Broj posjeta</th>
+                <th>Aktivan</th>
+                <th>Datum kreiranja</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var url in urlAdrese)
+            {
+                <tr>
+                    <td>@url.Id</td>
+                    <td>@url.Naziv</td>
+                    <td>@url.Opis</td>
+                    <td>@url.DestinacijaUrl</td>
+                    <td><a href="@($"{NavigationManager.BaseUri}s/{url.SkraceniUrl}")">@($"{NavigationManager.BaseUri}s/{url.SkraceniUrl}")</a></td>
+                    <td>@url.BrojPreusmjeravanja</td>
+                    <td>@(url.IsAktivan == true ? "Aktivan" : "Neaktivan")</td>
+                    <td>@(url.DatumKreiranja.ToString("dd.MM.yyyy HH:mm:ss"))</td>
+                    <td><a href="@($"{NavigationManager.BaseUri}izmijeni/{url.Id}")"> Izmijeni </a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 
 @code {
     [Inject]
     public SkratiURLService servis { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    List<UrlAdresa> urlAdrese = null;
 
+    protected override async Task OnInitializedAsync()
+    {
+        urlAdrese = await servis.GetAllUrlAdrese();
+    }
 }
